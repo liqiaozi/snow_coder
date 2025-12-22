@@ -6,7 +6,7 @@ export default defineConfig({
     title: "Compass Tech",
     srcDir: "src",
     description: "A VitePress Site",
-    head: [["link", {rel: "icon", href: "/imgs/index/logo.svg"}]],
+    head: [["link", {rel: "icon", href: "./imgs/index/logo.svg"}]],
     themeConfig: {
         logo: "/imgs/index/logo.svg",
         // 设置搜索框的样式
