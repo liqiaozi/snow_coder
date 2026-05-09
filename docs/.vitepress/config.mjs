@@ -49,25 +49,11 @@ export default defineConfig({
                 ]
             },
             {
-                text: 'Python编程',
+                text: '架构设计',
                 items: [
-                    {text: 'Python编程1', link: '/markdown-examples'},
-                    {text: 'Python编程2', link: '/markdown-examples'},
-                    {text: 'Python编程3', link: '/markdown-examples'}
-                ]
-            },
-            {
-                text: '微服务',
-                items: [
-                    {text: 'Spring Boot', link: '/markdown-examples'},
-                    {text: 'Spring Cloud Alibaba', link: '/markdown-examples'}
-                ]
-            },
-            {
-                text: '容器化',
-                items: [
-                    {text: 'Docker', link: '/markdown-examples'},
-                    {text: 'K8s', link: '/markdown-examples'}
+                    {text: 'Java编发编程', link: '/dir1/java并发/1-1'},
+                    {text: 'JVM调优技术', link: '/dir2/3'},
+                    {text: 'Java21新特性', link: '/dir1'}
                 ]
             },
             {
@@ -87,8 +73,7 @@ export default defineConfig({
             {
                 text: 'AI大模型',
                 items: [
-                    {text: '大模型基础', link: '/markdown-examples'},
-                    {text: '每日主题', link: '/markdown-examples'}
+                    {text: 'Claude Code', link: '/ai/claudecode/Claude Code概述'},
                 ]
             },
             {
@@ -98,13 +83,6 @@ export default defineConfig({
                     {text: '项目2', link: '/markdown-examples'}
                 ]
             },
-            {
-                text: '其他',
-                items: [
-                    {text: '其他1', link: '/markdown-examples'},
-                    {text: '其他2', link: '/markdown-examples'}
-                ]
-            },
         ],
 
         outlineTitle: "目录导航",
@@ -112,6 +90,7 @@ export default defineConfig({
         sidebar: {
             "/dir1": set_sidebar("/dir1"),
             "/dir2": set_sidebar("/dir2"),
+            "/ai": set_sidebar("/ai"),
         },
 
         socialLinks: [
