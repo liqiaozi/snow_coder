@@ -92,18 +92,13 @@ Claude Code按照以下顺序查找并加载Skill（越具体的位置优先级�
 ## 标准目录结构
 ```text
 skill-name/
-├── SKILL.md                        # 必需：Skill 的入口文件和核心指令
-│   ├── YAML frontmatter（元数据）
-│   └── Markdown 内容（指令）
+├── SKILL.md                        # 必需：YAML frontmatter（元数据）+ Markdown 内容（指令）
 ├── scripts/                        # 可选：存放可执行的辅助脚本
 │   ├── script1.py
 │   └── script2.sh
 ├── references/                     # 可选：存放供 AI 参考的外部文档、Schema 等
 │   ├── api_docs.md
 │   └── schema.md
-├── example/                        # 可选：优秀/反例  等
-│   ├── example1.md
-│   └── example2.md
 └── assets/                         # 可选：存放报告模板、图片等静态资源
     ├── template.html
     └── logo.png
@@ -119,16 +114,16 @@ SKILL.md是Skill的核心定义文件，由两部分组成：YAML Frontmatter（
 位于SKILL.md文件最顶端，用于定义Skill的基本信息、依赖和配置。
 
 
-| 字段名                      | 类型      | 是否必需 | 说明                                                                       |
-|--------------------------|---------| ---- |--------------------------------------------------------------------------|
-| name                     | string  | 必需   | 技能名称，必须使用 kebab-case（小写字母、数字和连字符 -，不能以 - 开头或结尾），长度不超过 64 字符              |
-| description              | string  | 必需   | 技能描述，清晰描述技能功能及触发场景，需包含“做什么”和“什么时候用”，不超过1024字符。 这是决定 Claude 是否自动调用该技能的关键。 |
-| license                  | 键值对     |    可选     | 指定许可证信息或指向许可证文件路径                                                        |
-| metadata                 | 键值对      |    可选     | 用于扩展元数据（如作者、版本号等）                                                        |
-| model                    | string  | 可选   | 指定运行模型（如opus、sonnet、haiku）                                               |
-| allowed-tools            | string  | 可选    | 限制该技能可使用的工具，使用逗号分隔，如Read, Grep, Glob                                     |
-| disable-model-invocation | boolean |     可选  | 设为true时禁止Claude自动激活，只能手动/调用                                              |
-| user-invocable                 | boolean      |    可选     | 是否允许用户通过/命令手动调用，设为 false 时技能仅可由 Claude 自动调用，不暴露为用户命令                                                         |
+| 字段              | 是否必需   | 说明                                                                           |
+|-----------------|--------|------------------------------------------------------------------------------|
+| name            | 必需     | Skill名称，唯一标识。约束：<br/>长度不超过 64 字符；仅允许使用小写字母、数字和连字符 -，不能以 - 开头或结尾；必须与所在文件夹名一致。 |
+| description     | 必需     | 描述Skill做什么和什么时候用。约束：<br/>长度不超过1024字符，不能为空；应该包含AI可以识别任务的关键词。                  |
+| license         | 可选     | 许可证信息或指向许可证文件路径。                                                             |
+| metadata        | 可选     | 扩展元数据（如作者、版本号等）；                                                             |
+| model           | 可选     | 指定运行模型（如opus、sonnet、haiku）                                                   |
+| allowed-tools   | 可选     | 限制该技能可使用的工具。约束：<br/>使用逗号分隔，如Read, Grep, Glob                                      |
+| disable-model-invocation | 可选     | 设为true时禁止Claude自动激活，只能手动/调用                                                  |
+| user-invocable        | 可选     | 是否允许用户通过/命令手动调用，设为 false 时技能仅可由 Claude 自动调用，不暴露为用户命令                         |
 
 
 ```shell
@@ -145,7 +140,11 @@ description: 当用户要求"添加注释"或"代码注释"时自动为代码添
 
 ### Markdown Body（指令主体）
 
-Markdown Body是SKILL.md的核心部分，包含所有详细指令。推荐遵循以下结构：
+Markdown Body是SKILL.md的核心部分，包含所有详细指令。对正文格式没有硬性限制，只要能帮助 AI 有效执行任务即可。
+
+建议正文控制在 500 行以内，如果内容较多，可以把详细的参考资料拆分到单独的文件中。
+
+推荐遵循以下结构：
 
 ```shell
 # [Skill名称]
@@ -243,19 +242,34 @@ description: 当用户需要生成公众号标题时，自动应用5大爆款公
 
 ### 文件引用机制
 
-Skills 支持在 SKILL.md 中引用其他文件：
+在 SKILL.md 中引用其他文件时，采用相对于Skill根目录的路径。例如：
 
 ```text
-## 高级用法
-
 详情请参考 [API 文档](references/api.md)。
 
-运行示例脚本：
-
-python scripts/demo.py
+运行示例脚本：scripts/demo.py
 
 ```
+建议文件引用保持在一层深度，避免深层嵌套的引用链。
 
+### 可选的目录结构
+
+> script/ 目录
+
+存放 可以运行的可执行代码。脚本应该是自包含的或明确说明依赖关系，包含有用的错误提示信息，并能妥善处理边界情况。
+
+常见支持的语言包括 Python、Bash 和 JavaScript。
+
+
+> references/ 目录
+
+存放可以读取的补充文档，例如：REFERENCE.md（详细技术参考）、OpenApi.md（接口规范）等。
+
+建议每个参考文件保持聚焦，因为按需加载文件，文件越小，消耗的上下文越少。
+
+> assets/ 目录
+
+存放静态资源文件，包括：模板文件（文档模板、配置模板）、图片（示意图、示例图）、数据文件（查找表、Schema 定义）。
 
 
 # 第三部分：管理 Skill（全生命周期）
