@@ -34,7 +34,7 @@ function getList(params, path1, pathname) {
             const files = fs.readdirSync(dir);
             res.push({
                 text: params[file],
-                collapsible: true,
+                collapsed: true,
                 items: getList(files, dir, `${pathname}/${params[file]}`),
             });
         } else {

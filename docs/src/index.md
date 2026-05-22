@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "指南针技术"
   text: Dancing code, anchored direction.
-  tagline: 用代码指引方向，用文字沉淀思考
+  tagline: 棱镜之内，代码如光
   image:
     src: imgs/index/background.svg
     alt: VitePress

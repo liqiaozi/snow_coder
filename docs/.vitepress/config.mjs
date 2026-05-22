@@ -2,6 +2,7 @@ import {defineConfig} from 'vitepress'
 import {set_sidebar} from "../utils/auto-gen-sidebar.mjs";
 
 export default defineConfig({
+    lang: 'zh-CN',
     base: "/snow_coder/",
     title: "Compass Tech",
     srcDir: "src",
@@ -35,7 +36,7 @@ export default defineConfig({
             {
                 text: 'AI大模型',
                 items: [
-                    {text: 'Claude Code', link: '/ai/claudecode/Claude Code概述'},
+                    {text: 'Claude Code', link: '/ai/claudecode/第1部分 基础入门/Claude Code概述.md'},
                 ]
             }
         ],
@@ -47,7 +48,7 @@ export default defineConfig({
         },
 
         socialLinks: [
-            {icon: 'github', link: 'https://github.com/liqiaozi'}
+            {icon: 'github', link: 'https://github.com'}
         ],
 
         lastUpdated: {
