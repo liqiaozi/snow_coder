@@ -2,29 +2,20 @@
 
 Skills 的创建是一个结构化的过程，遵循标准的目录结构和文件格式。本节将详细介绍创建 Skills 的完整流程。
 
-## 1.规划 Skills
+## 第1步：规划 Skill
 
-**定义目标和范围**
+**确定如下问题**
 
-在创建 Skills 之前，需要明确定义其目标和适用范围：
 
-```text
-- 功能描述：Skills 解决的具体问题
-- 适用场景：何时应该使用这个 Skills
-- 预期输出：使用后的结果和价值
-- 限制条件：Skills 的局限性和边界
-```
+| 问题 | 示例 |
+|------|------|
+| **解决什么问题**？ | 读取 Swagger JSON 生成接口文档 |
+| **什么时候用**？ | "把这个 json 生成接口文档" |
+| **产出什么**？ | Markdown / PDF 格式的结构化文档 |
+| **边界在哪**？ | 仅支持 Swagger 2.0，暂不支持 OpenAPI 3.0 |
 
-**分析需求**
 
-```text
-- 用户需求：目标用户的使用场景
-- 技术需求：所需的工具和资源
-- 性能需求：响应时间和资源消耗要求
-- 兼容性需求：支持的平台和环境
-```
-
-## 2.创建目录结构
+## 第2步：创建目录
 
 **标准目录结构**
 
@@ -46,98 +37,35 @@ my-skill/
 - 避免连续连字符或以连字符开头/结尾 
 - 目录名应与 SKILL.md 中的 name 字段一致
 
-## 3.编写 SKILL.md 文件
+## 第3步：编写 SKILL.md 
 SKILL.md 是 Skills 的核心文件，必须遵循特定的格式：
 ```yaml
 ---
-name: my-skill
-description: Brief description of what this skill does and when to use it
+name: api-doc-generator
+description: >
+  当用户要求"生成接口文档"或"将swagger json转为文档"时，读取Swagger 2.0规范的JSON文件，生成Markdown或PDF格式的接口文档
 ---
+```
+编写Markdown Body。
 
+## 第4步：测试
+
+```text
+# 验证 Skill 是否被加载
+claude --skill api-doc-generator —version
+
+# 实际测试
+"请使用 api-doc-generator 帮我生成接口文档"
 ```
 
-## 4.编写指令内容
-```markdown
 
-# My Skill Name
+# 二、完整示例 swagger -> 接口文档skill
 
-## 概述
+## 2.1 需求定义
 
-[简要介绍 Skills 的功能和价值]
-
-## 使用时机
-
-[明确说明何时应该使用这个 Skills]
-- 场景1：具体的使用情况
-- 场景2：另一种使用情况
-
-## 详细说明
-
-### 步骤1：准备工作
-[具体的执行步骤]
-
-### 步骤2：主要处理
-[核心处理逻辑]
-
-### 步骤3：结果验证
-[验证和确认结果]
-
-## 示例
-
-### 示例1：基本用法
-**输入：**
-用户请求示例
-
-**执行步骤：**
-1. 解析输入
-2. 处理数据
-3. 生成输出
-
-**输出：**
-预期结果
-
-
-### 示例2：高级用法
-[更复杂的示例]
-
-## 注意事项
-
-### 限制条件
-- [已知限制]
-- [不支持的场景]
-
-### 错误处理
-- [常见错误及解决方法]
-
-### 性能考虑
-- [性能特征和优化建议]
-
-## 相关资源
-- [API 文档](references/api_reference.md)
-- [配置模板](assets/config_template.json)
-```
-
-## 5.添加支持文件（可选）
-
-**脚本文件 (scripts/)**
-
-**参考文档 (references/)**
-
-**静态资源 (assets/)**
-
-## 6.测试和验证
-
-## 7.部署和发布
-
-
-# 二、创建自己的第一个skill
-
-## 规划Skill
-
-我要创建这样一个示例：
 ```text
 ## 需求描述
-- **功能目标**：读取满足swagger2.x规范的指定json文件，生成指定内容格式的markdown或pdf接口文档。
+- **功能目标**：读取 swagger2.0 规范的指定json文件，生成结构化后的的markdown或pdf接口文档。
 - **具体任务**：
   - 读取swagger2.x规范的指定json文件内容
   - 识别接口文档基本信息、接口分组和接口信息
@@ -152,22 +80,14 @@ description: Brief description of what this skill does and when to use it
   - 文件命名为：原文件名_接口文档.pdf 或 原文件名_接口文档.md
 ```
 
+## 2.2 Skill.md完整内容
+ 
+参考【附录 swagger-api-doc-generator.md】
 
 
-
-
-
-
-## 使用skill-creator辅助创建
+## 三、使用skill-creator辅助创建
 
 skill-creator 是 Anthropic 官方提供的 Skills，专门用于指导和辅助创建其他 Skills。它的主要功能包括：
-
-- 理解需求：通过分析具体示例来理解 Skills 应该实现的功能 
-- 规划内容：识别可重用的脚本、参考文档和资源文件 
-- 生成结构：自动创建 Skills 的标准目录结构 
-- 编写文档：帮助编写 SKILL.md 和相关文档 
-- 打包验证：验证并打包 Skills 
-- 迭代优化：基于实际使用改进 Skills
 
 **调用 skill-creator**
 
@@ -179,4 +99,8 @@ claude --skill skill-creator
 "请使用 skill-creator 帮助我创建一个处理 PDF 文件的 Skills"
 ```
 
-然后提供我们需要创建的Skill需求信息，并跟随指导逐步创建。
+- 理解需求：通过分析输入来理解 Skills 应该实现的功能 
+- 规划内容：识别可重用的脚本、参考文档和资源文件 
+- 生成结构：自动创建 Skills 的标准目录结构 
+- 编写文档：帮助编写 SKILL.md 和相关文档 
+- 打包验证：验证并打包 Skills
